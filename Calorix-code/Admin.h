@@ -1,4 +1,5 @@
 #include "User.h"
+#include "Enums.h"
 
 class Admin : public User {
 public:
