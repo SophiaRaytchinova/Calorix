@@ -6,12 +6,13 @@ protected:
     int age;
     double weight;
     double height;
-    gender gender;
+    gender gender_;
     int activityLevel;
 public:
+    UserProfile(int age_, double weight_, double height_, gender gender_, int activityLevel_);
     int getAge() const;
     double getWeight() const;
     double getHeight() const;
-    std::string getGender() const;
+    gender getGender() const;
     int getActivityLevel() const;
 };
