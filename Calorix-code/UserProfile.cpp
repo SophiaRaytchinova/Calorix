@@ -15,9 +15,14 @@ double UserProfile::getHeight() const
     return height;
 }
 
-bool UserProfile::getGender() const
+std::string UserProfile::getGender() const
 {
-    return gender;
+    if (gender == gender::MALE) {
+        return "Male";
+    } 
+    else {
+        return "Female";
+    }
 }
 
 int UserProfile::getActivityLevel() const

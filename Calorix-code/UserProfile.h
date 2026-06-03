@@ -1,16 +1,17 @@
 #pragma once
-
+#include "Enums.h"
+#include <string>
 class UserProfile {
 protected: 
     int age;
     double weight;
     double height;
-    bool gender; // 1 male 0 female
+    gender gender;
     int activityLevel;
 public:
     int getAge() const;
     double getWeight() const;
     double getHeight() const;
-    bool getGender() const;
+    std::string getGender() const;
     int getActivityLevel() const;
 };
