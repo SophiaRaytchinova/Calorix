@@ -1,6 +1,6 @@
 #pragma once
 
-enum activityLevel {
+enum class activityLevel {
     SEDENTARY,
     LIGHT,
     MODERATE,
@@ -8,13 +8,13 @@ enum activityLevel {
     VERY_ACTIVE
 }; 
 
-enum goalType {
+enum class goalType {
     WEIGHT_LOSS,
     BULKING,
     MAINTENANCE
 };
 
-enum muscleGroup {
+enum class muscleGroup {
     CHEST,
     BACK,
     LEGS,
@@ -22,4 +22,9 @@ enum muscleGroup {
     ARMS,
     CORE,
     CARDIO
+};
+
+enum class gender {
+    MALE,
+    FEMALE
 };
