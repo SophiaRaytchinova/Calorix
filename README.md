@@ -241,7 +241,7 @@ person1 1234 15 70 150 MALE
 
 The project uses a factory-style class called `UserFactory`.
 
-Location:
+Locations:
 
 ```text
 include/users/UserFactory.h
