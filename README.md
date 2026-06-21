@@ -246,11 +246,13 @@ Location:
 ```text
 include/users/UserFactory.h
 src/users/UserFactory.cpp
+```
 
 Reponsible for:
 
 ```text
 Creating different types of users - admin, trainee
+```
 
 ### Repository Pattern
 
@@ -265,10 +267,11 @@ include/repositories/FoodRepository.h
 src/repositories/FoodRepository.cpp
 include/repositories/ExerciseRepository.h
 src/repositories/ExerciseRepository.cpp
+```
 
 Reponsible for:
 
 ```text
 Storing, searching, adding, updating and removing objects. This separates data management from the business logic in Calorix.
-
+```
 
