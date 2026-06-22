@@ -90,7 +90,7 @@ ActivityLevel activityLevelFromString(const std::string& value) {
     {
         return ActivityLevel::VERY_ACTIVE;
     }
-    throw std::invalid_argument("Invalid activity level.");
+    throw std::invalid_argument(" Use SEDENTARY, LIGHT, MODERATE, ACTIVE or VERY_ACTIVE.");
 }
 
 GoalType goalTypeFromString(const std::string& value) {
@@ -138,5 +138,5 @@ MuscleGroup muscleGroupFromString(const std::string& value) {
     {
         return MuscleGroup::CARDIO;
     }
-    throw std::invalid_argument("Invalid muscle group.");
+    throw std::invalid_argument("Invalid muscle group. Use CHEST, BACK, LEGS, SHOULDERS, ARMS, CORE or CARDIO.");
 }
