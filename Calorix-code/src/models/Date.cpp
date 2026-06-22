@@ -1,5 +1,5 @@
 #include "../../include/models/Date.h"
-#include <ctime>
+#include <ctime> //за текущат дата
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
@@ -38,7 +38,7 @@ Date Date::fromString(const std::string& value)
 
     if (value.find('-') != std::string::npos) 
     {
-         ss >> y >> c1 >> m >> c2 >> d; 
+        ss >> y >> c1 >> m >> c2 >> d; 
     }
     else { ss >> d >> c1 >> m >> c2 >> y; 
     } 
