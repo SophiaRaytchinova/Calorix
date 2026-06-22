@@ -1,5 +1,4 @@
 #include "../../include/repositories/FoodRepository.h"
-#include <algorithm>
 
 void FoodRepository::clear()
 {
