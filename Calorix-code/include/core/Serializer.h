@@ -7,13 +7,6 @@ class Calorix;
 class Serializer
 {
 public:
-    static void save(
-        const Calorix& system,
-        const std::string& filename
-    );
-
-    static void load(
-        Calorix& system,
-        const std::string& filename
-    );
+    static void save(const Calorix& system, const std::string& filename);
+    static void load(Calorix& system, const std::string& filename);
 };
