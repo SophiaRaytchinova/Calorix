@@ -27,22 +27,22 @@ Calorix::Calorix() : currentUser(nullptr), nextUserId(1), nextFoodId(1), nextExe
 
 void Calorix::setNextUserId(unsigned id)
 {
-    nextUserId=id;
+    nextUserId = id;
 } 
 
 void Calorix::setNextFoodId(unsigned id)
 {
-    nextFoodId=id;
+    nextFoodId = id;
 } 
 
 void Calorix::setNextExerciseId(unsigned id) 
 {
-    nextExerciseId=id;
+    nextExerciseId = id;
 } 
 
 void Calorix::setNextEntryId(unsigned id)
 {
-    nextEntryId=id;
+    nextEntryId = id;
 }
 unsigned Calorix::generateUserId()
 {
@@ -144,7 +144,7 @@ void Calorix::load()
     userRepository.clear(); 
     foodRepository.clear(); 
     exerciseRepository.clear(); 
-    currentUser=nullptr;
+    currentUser = nullptr;
 
     std::ifstream in(DATA_FILE);
     if (!in)
@@ -153,7 +153,7 @@ void Calorix::load()
         return; 
     }
     std::string line;
-    while (std::getline(in,line))
+    while (std::getline(in, line))
     {
         if(line.empty() || line[0]=='#') continue;
         auto p = splitLine(line);
@@ -402,7 +402,7 @@ void Calorix::executeCommand(const std::string& commandLine)
             userRepository.removeUser(tokens[1]);
             std::cout << "User blocked/deleted.\n";
         } 
-        else if(cmd=="log-food")
+        else if(cmd == "log-food")
         {
             if (!isCurrentUserTrainee())
             {
