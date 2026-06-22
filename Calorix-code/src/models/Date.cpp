@@ -40,7 +40,9 @@ Date Date::fromString(const std::string& value)
     {
         ss >> y >> c1 >> m >> c2 >> d; 
     }
-    else { ss >> d >> c1 >> m >> c2 >> y; 
+    else 
+    { 
+        ss >> d >> c1 >> m >> c2 >> y; 
     } 
     if (!ss || d < 1 || m < 1 || m > 12 || y < 1900) throw std::invalid_argument("Invalid date. Use YYYY-MM-DD."); 
     return Date(d, m, y); 
