@@ -1,6 +1,8 @@
 #include "../../include/utils/WorkoutGenerator.h"
 #include <vector>
 #include <algorithm>
+//dynamic programming table to fix 0/1 knapsack problem
+//най-много калории, които могат да се изгорят за дадено време, като се използват наличните упражнения
 
 std::vector<std::shared_ptr<Exercise>> WorkoutGenerator::generatePlan(const std::vector<std::shared_ptr<Exercise>>& exercises,int durationMinutes) {
     if (durationMinutes <= 0) return {}; 
