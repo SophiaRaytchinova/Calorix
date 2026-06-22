@@ -23,7 +23,7 @@ void Trainee::addGoal(const FitnessGoal& g)
 
 void Trainee::addToFavorites(const std::string& ex)
 {
-    for(const auto& f:favoriteExercises)
+    for (const auto& f:favoriteExercises)
         if (f == ex)
         {
             std::cout << "Exercise already in favorites.\n";
@@ -48,7 +48,7 @@ void Trainee::viewFavorites() const
 
 void Trainee::viewDailySummary()const
 {
-    double cal=0, p=0, c=0, fat=0, out=0;
+    double cal = 0, p = 0, c = 0, fat = 0, out = 0;
     for (const auto& x:foodDiary)
         if (x.getDate() == Date::today())
         {
