@@ -1,8 +1,6 @@
 # Calorix Fitness System
 
-Calorix is a C++ console application for tracking food intake, exercise activity, calorie balance, fitness goals and workout planning. The system supports two types of users: regular trainees and administrators.
-
-The project was developed as an Object-Oriented Programming course project for FMI, Sofia University.
+Calorix is a C++ console-based fitness tracking system for managing food intake, fitness goals and workout planning. It supports user accounts with roles, calorie and macro tracking, BMI/BMR calculations, and progress monitoring. Admins manage food and exercises, while users can generate workout plans and track daily fitness data.
 
 ## Features
 
