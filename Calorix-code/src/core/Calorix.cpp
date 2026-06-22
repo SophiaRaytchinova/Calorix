@@ -304,261 +304,261 @@ void Calorix::executeCommand(const std::string& commandLine)
     if (tokens.empty()) return; 
     const auto& cmd = tokens[0];
     try {
-    if (cmd == "register")
-    {
-        if (tokens.size() != 7)
+        if (cmd == "register")
         {
-            std::cout << "Usage: register <username> <password> <age> <weight> <height> <gender>\n";
-            return;
+            if (tokens.size() != 7)
+            {
+                std::cout << "Usage: register <username> <password> <age> <weight> <height> <gender>\n";
+                return;
+            } 
+            registerUser(tokens[1], tokens[2], std::stoi(tokens[3]), std::stod(tokens[4]), std::stod(tokens[5]), genderFromString(tokens[6]));
         } 
-        registerUser(tokens[1], tokens[2], std::stoi(tokens[3]), std::stod(tokens[4]), std::stod(tokens[5]), genderFromString(tokens[6]));
-    } 
-    else if (cmd == "login")
-    {
-        if (tokens.size() != 3)
+        else if (cmd == "login")
         {
-            std::cout << "Usage: login <username> <password>\n";
-            return;
-        }
-        login(tokens[1], tokens[2]);
-    } 
-    else if (cmd == "logout")
-    {
-        logout();
-    }
-    else if (cmd == "help")
-    {
-        if (currentUser)
-        {
-            currentUser->help();
-        }
-        else
-        {
-            std::cout << "General commands:\nregister <username> <password> <age> <weight> <height> <gender>\nlogin <username> <password>\nhelp\nend\nDefault admin: admin admin\n";
-        }
-    }
-    else if (cmd == "add-food")
-    {
-        if (!isCurrentUserAdmin())
-        {
-            std::cout << "Only admin can add food.\n";
-            return;
+            if (tokens.size() != 3)
+            {
+                std::cout << "Usage: login <username> <password>\n";
+                return;
+            }
+            login(tokens[1], tokens[2]);
         } 
-        if (tokens.size() != 6)
+        else if (cmd == "logout")
         {
-            std::cout << "Usage: add-food <name> <calories> <protein> <carbs> <fat>\n";
-            return;
+            logout();
         }
-        if (foodRepository.exists(tokens[1]))
+        else if (cmd == "help")
         {
-            std::cout << "Food already exists.\n";
-            return;
+            if (currentUser)
+            {
+                currentUser->help();
+            }
+            else
+            {
+                std::cout << "General commands:\nregister <username> <password> <age> <weight> <height> <gender>\nlogin <username> <password>\nhelp\nend\nDefault admin: admin admin\n";
+            }
         }
-        foodRepository.addFood(Food(generateFoodId(), tokens[1], std::stod(tokens[2]), std::stod(tokens[3]), std::stod(tokens[4]), std::stod(tokens[5])));
-        std::cout << "Food added.\n";
-    }
-    else if (cmd == "update-food")
-    {
-        if (!isCurrentUserAdmin())
+        else if (cmd == "add-food")
         {
-            std::cout << "Only admin can update food.\n";
-            return;
+            if (!isCurrentUserAdmin())
+            {
+                std::cout << "Only admin can add food.\n";
+                return;
+            } 
+            if (tokens.size() != 6)
+            {
+                std::cout << "Usage: add-food <name> <calories> <protein> <carbs> <fat>\n";
+                return;
+            }
+            if (foodRepository.exists(tokens[1]))
+            {
+                std::cout << "Food already exists.\n";
+                return;
+            }
+            foodRepository.addFood(Food(generateFoodId(), tokens[1], std::stod(tokens[2]), std::stod(tokens[3]), std::stod(tokens[4]), std::stod(tokens[5])));
+            std::cout << "Food added.\n";
         }
-        if (tokens.size() != 3)
+        else if (cmd == "update-food")
         {
-            std::cout << "Usage: update-food <food-name> <new-calories>\n";
-            return;
+            if (!isCurrentUserAdmin())
+            {
+                std::cout << "Only admin can update food.\n";
+                return;
+            }
+            if (tokens.size() != 3)
+            {
+                std::cout << "Usage: update-food <food-name> <new-calories>\n";
+                return;
+            }
+            if (!foodRepository.exists(tokens[1]))
+            {
+                std::cout << "Food not found.\n";
+                return;
+            }
+            foodRepository.updateFoodCalories(tokens[1], std::stod(tokens[2]));
+            std::cout << "Food updated.\n";
         }
-        if (!foodRepository.exists(tokens[1]))
+        else if (cmd == "block-user")
         {
-            std::cout << "Food not found.\n";
-            return;
-        }
-        foodRepository.updateFoodCalories(tokens[1], std::stod(tokens[2]));
-        std::cout << "Food updated.\n";
-    }
-    else if (cmd == "block-user")
-    {
-        if (!isCurrentUserAdmin())
-        {
-            std::cout << "Only admin can block users.\n";
-            return;
-        }
-        if (tokens.size() != 2)
-        {
-            std::cout << "Usage: block-user <username>\n";
-            return;
-        }
-        if (tokens[1] == currentUser->getUsername())
-        {
-            std::cout << "Admin cannot block itself while logged in.\n";
-            return;
-        }
-        if (!userRepository.usernameExists(tokens[1]))
-        {
-            std::cout << "User not found.\n";
-            return;
-        }
-        userRepository.removeUser(tokens[1]);
-        std::cout << "User blocked/deleted.\n";
-    } 
-    else if(cmd=="log-food")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        if (tokens.size() != 3)
-        {
-            std::cout << "Usage: log-food <food-name> <quantity_grams>\n";
-            return;
-        }
-        auto food = foodRepository.findFood(tokens[1]);
-        if (!food)
-        {
-            std::cout << "Food not found.\n";
-            return;
-        }
-        currentUser->logFood(FoodEntry(generateEntryId(), food, std::stod(tokens[2]), Date::today()));
-        std::cout << "Food logged.\n";
-    }
-    else if (cmd == "log-exercise")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        if (tokens.size() != 3)
-        {
-            std::cout << "Usage: log-exercise <exercise-name> <duration_minutes>\n";
-            return;
-        }
-        auto ex = exerciseRepository.findExercise(tokens[1]);
-        if (!ex)
-        {
-            std::cout << "Exercise not found.\n";
-            return;
-        }
-        currentUser->logExercise(ExerciseEntry(generateEntryId(), ex, std::stoi(tokens[2]), Date::today()));
-        std::cout << "Exercise logged.\n";
-    }
-    else if (cmd == "view-daily-summary" || cmd == "view-summary")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        currentUser->viewDailySummary();
-    }
-    else if (cmd == "set-goals" || cmd == "set-goal")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        if (tokens.size() != 4)
-        {
-            std::cout << "Usage: set-goals <goal-type> <target-value> <deadline YYYY-MM-DD>\n";
-            return;
-        }
-        auto* t = dynamic_cast<Trainee*>(currentUser);
-        t->addGoal(FitnessGoal(goalTypeFromString(tokens[1]), std::stod(tokens[2]), Date::today(), Date::fromString(tokens[3])));
-        std::cout << "Goal set.\n";
-    }
-    else if (cmd == "view-progress")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        currentUser->viewProgress();
-    }
-    else if (cmd == "calculate-bmi")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        auto* t = dynamic_cast<Trainee*>(currentUser);
-        std::cout << std::fixed << std::setprecision(2) << "BMI: " << t->calculateBMI() << "\n";
-    }
-    else if (cmd == "calculate-bmr")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        auto* t = dynamic_cast<Trainee*>(currentUser);
-        std::cout << std::fixed << std::setprecision(2) << "BMR: " << t->calculateBMR() << " kcal/day\nEstimated daily calories: " << t->getProfile().calculateDailyCalories() << " kcal/day\n";
-    }
-    else if (cmd == "add-to-favorites")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        if (tokens.size() != 2)
-        {
-            std::cout << "Usage: add-to-favorites <exercise-name>\n";
-            return;
-        }
-        if (!exerciseRepository.exists(tokens[1]))
-        {
-            std::cout << "Exercise not found.\n";
-            return;
-        }
-        dynamic_cast<Trainee*>(currentUser)->addToFavorites(tokens[1]);
-        std::cout << "Favorite saved.\n";
-    }
-    else if (cmd == "view-favorites")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
-        }
-        dynamic_cast<Trainee*>(currentUser)->viewFavorites();
-    } 
-    else if (cmd == "generate-workout-plan")
-    {
-        if (!isCurrentUserTrainee())
-        {
-            std::cout << "Login as trainee first.\n";
-            return;
+            if (!isCurrentUserAdmin())
+            {
+                std::cout << "Only admin can block users.\n";
+                return;
+            }
+            if (tokens.size() != 2)
+            {
+                std::cout << "Usage: block-user <username>\n";
+                return;
+            }
+            if (tokens[1] == currentUser->getUsername())
+            {
+                std::cout << "Admin cannot block itself while logged in.\n";
+                return;
+            }
+            if (!userRepository.usernameExists(tokens[1]))
+            {
+                std::cout << "User not found.\n";
+                return;
+            }
+            userRepository.removeUser(tokens[1]);
+            std::cout << "User blocked/deleted.\n";
         } 
-        if (tokens.size() != 2)
+        else if(cmd=="log-food")
         {
-            std::cout << "Usage: generate-workout-plan <duration_minutes>\n";
-            return;
-        } 
-        int duration = std::stoi(tokens[1]); 
-        auto plan = WorkoutGenerator::generatePlan(exerciseRepository.getExercises(), duration); 
-        if (plan.empty())
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            if (tokens.size() != 3)
+            {
+                std::cout << "Usage: log-food <food-name> <quantity_grams>\n";
+                return;
+            }
+            auto food = foodRepository.findFood(tokens[1]);
+            if (!food)
+            {
+                std::cout << "Food not found.\n";
+                return;
+            }
+            currentUser->logFood(FoodEntry(generateEntryId(), food, std::stod(tokens[2]), Date::today()));
+            std::cout << "Food logged.\n";
+        }
+        else if (cmd == "log-exercise")
         {
-            std::cout << "No workout plan can be generated.\n";
-            return;
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            if (tokens.size() != 3)
+            {
+                std::cout << "Usage: log-exercise <exercise-name> <duration_minutes>\n";
+                return;
+            }
+            auto ex = exerciseRepository.findExercise(tokens[1]);
+            if (!ex)
+            {
+                std::cout << "Exercise not found.\n";
+                return;
+            }
+            currentUser->logExercise(ExerciseEntry(generateEntryId(), ex, std::stoi(tokens[2]), Date::today()));
+            std::cout << "Exercise logged.\n";
+        }
+        else if (cmd == "view-daily-summary" || cmd == "view-summary")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            currentUser->viewDailySummary();
+        }
+        else if (cmd == "set-goals" || cmd == "set-goal")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            if (tokens.size() != 4)
+            {
+                std::cout << "Usage: set-goals <goal-type> <target-value> <deadline YYYY-MM-DD>\n";
+                return;
+            }
+            auto* t = dynamic_cast<Trainee*>(currentUser);
+            t->addGoal(FitnessGoal(goalTypeFromString(tokens[1]), std::stod(tokens[2]), Date::today(), Date::fromString(tokens[3])));
+            std::cout << "Goal set.\n";
+        }
+        else if (cmd == "view-progress")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            currentUser->viewProgress();
+        }
+        else if (cmd == "calculate-bmi")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            auto* t = dynamic_cast<Trainee*>(currentUser);
+            std::cout << std::fixed << std::setprecision(2) << "BMI: " << t->calculateBMI() << "\n";
+        }
+        else if (cmd == "calculate-bmr")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            auto* t = dynamic_cast<Trainee*>(currentUser);
+            std::cout << std::fixed << std::setprecision(2) << "BMR: " << t->calculateBMR() << " kcal/day\nEstimated daily calories: " << t->getProfile().calculateDailyCalories() << " kcal/day\n";
+        }
+        else if (cmd == "add-to-favorites")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            if (tokens.size() != 2)
+            {
+                std::cout << "Usage: add-to-favorites <exercise-name>\n";
+                return;
+            }
+            if (!exerciseRepository.exists(tokens[1]))
+            {
+                std::cout << "Exercise not found.\n";
+                return;
+            }
+            dynamic_cast<Trainee*>(currentUser)->addToFavorites(tokens[1]);
+            std::cout << "Favorite saved.\n";
+        }
+        else if (cmd == "view-favorites")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            }
+            dynamic_cast<Trainee*>(currentUser)->viewFavorites();
         } 
-        int totalTime = 0; 
-        std::cout << "Workout plan:\n"; 
+        else if (cmd == "generate-workout-plan")
+        {
+            if (!isCurrentUserTrainee())
+            {
+                std::cout << "Login as trainee first.\n";
+                return;
+            } 
+            if (tokens.size() != 2)
+            {
+                std::cout << "Usage: generate-workout-plan <duration_minutes>\n";
+                return;
+            } 
+            int duration = std::stoi(tokens[1]); 
+            auto plan = WorkoutGenerator::generatePlan(exerciseRepository.getExercises(), duration); 
+            if (plan.empty())
+            {
+                std::cout << "No workout plan can be generated.\n";
+                return;
+            } 
+            int totalTime = 0; 
+            std::cout << "Workout plan:\n"; 
 
-        for(const auto& e:plan)
-        { 
-            totalTime += e->getRecommendedDurationMinutes(); 
-            std::cout << "- " << e->getName() << " (" << e->getRecommendedDurationMinutes() << " min, " << toString(e->getMuscleGroup()) << ")\n"; 
-        } std::cout<<std::fixed<<std::setprecision(2)<<"Total time: "<<totalTime<<" min\nExpected calories burned: "<<WorkoutGenerator::planCalories(plan)<<" kcal\n";
-    } 
-    else std::cout<<"Unknown command. Type help.\n";
+            for(const auto& e:plan)
+            { 
+                totalTime += e->getRecommendedDurationMinutes(); 
+                std::cout << "- " << e->getName() << " (" << e->getRecommendedDurationMinutes() << " min, " << toString(e->getMuscleGroup()) << ")\n"; 
+            } std::cout << std::fixed << std::setprecision(2) << "Total time: " << totalTime << " min\nExpected calories burned: " << WorkoutGenerator::planCalories(plan) << " kcal\n";
+        } 
+        else std::cout << "Unknown command. Type help.\n";
     } 
     catch (const std::exception& e)
     {
-        std::cout<<"Error: "<<e.what()<<"\n"; 
+        std::cout << "Error: " << e.what() << "\n"; 
     }
 }
